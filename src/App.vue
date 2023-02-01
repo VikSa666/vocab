@@ -3,10 +3,10 @@
     <h1>Hello World</h1>
     <div class="cathegory-picker">
       <button @click="setAllCathegories">All Cathegories</button>
-      <button @click="setOneCathegory">One Cathegories</button>
-      <button @click="setSelectedCathegories">Selected Cathegories</button>
+      <!-- <button @click="setOneCathegory">One Cathegories</button>
+      <button @click="setSelectedCathegories">Selected Cathegories</button> -->
     </div>
-    <AllWords :list="wordsList" v-if="matchesAll()" />
+    <AllWords />
   </div>
 </template>
 
@@ -15,6 +15,8 @@ import { defineComponent } from "vue";
 import json from "./assets/vocab.json";
 import AllWords from "./components/exams/AllCathegories.vue";
 import { foo } from "@/utils";
+import { useVocabularyStore } from "@/stores/vocabulary";
+import { mapState } from "pinia";
 
 enum Modality {
   All,
@@ -23,47 +25,51 @@ enum Modality {
 }
 
 export default defineComponent({
+  setup() {
+    const wordList = useVocabularyStore();
+    return wordList;
+  },
   data() {
     return {
       json: json,
       cathegoryList: [] as string[],
       modality: Modality.All,
-      cathegorySelected: "" as string,
-      cathegoriesSelected: [] as string[],
-      wordsList: [] as { russian: string; spanish: string[] }[],
+      wordsList: {} as { [key: string]: string[] },
     };
   },
+  mounted() {
+    this.json.forEach((element) => {
+      element.words.forEach(
+        (word) => (this.wordList[word.russian] = word.spanish)
+      );
+    });
+  },
   methods: {
-    cathegories() {
-      this.json.forEach((element) => {
-        this.cathegoryList.push(element.name);
-      });
-    },
+    // cathegories() {
+    //   this.json.forEach((element) => {
+    //     this.cathegoryList.push(element.name);
+    //   });
+    // },
     matchesAll(): boolean {
       return this.modality === Modality.All;
     },
-    matchesOne(): boolean {
-      return this.modality === Modality.One;
-    },
-    matchesSelection(): boolean {
-      return this.modality === Modality.Selection;
-    },
+    // matchesOne(): boolean {
+    //   return this.modality === Modality.One;
+    // },
+    // matchesSelection(): boolean {
+    //   return this.modality === Modality.Selection;
+    // },
     setAllCathegories() {
       this.modality = Modality.All;
     },
-    setOneCathegory() {
-      this.modality = Modality.One;
-      //   this.cathegorySelected = cathegory;
-    },
-    setSelectedCathegories() {
-      this.modality = Modality.Selection;
-      //   this.cathegoriesSelected = cathegories;
-    },
-    loadAllWords() {
-      this.json.forEach((element) => {
-        element.words.forEach((word) => this.wordsList.push(word));
-      });
-    },
+    // setOneCathegory() {
+    //   this.modality = Modality.One;
+    //   //   this.cathegorySelected = cathegory;
+    // },
+    // setSelectedCathegories() {
+    //   this.modality = Modality.Selection;
+    //   //   this.cathegoriesSelected = cathegories;
+    // },
   },
   components: {
     AllWords,
