@@ -2,21 +2,26 @@
   <div>
     <h1>Hello World</h1>
     <div class="cathegory-picker">
-      <button @click="setAllCathegories">All Cathegories</button>
+      <!-- <button @click="setAllCathegories">All Cathegories</button> -->
       <!-- <button @click="setOneCathegory">One Cathegories</button>
       <button @click="setSelectedCathegories">Selected Cathegories</button> -->
+      <div id="nav">
+        <router-link to="/login">login</router-link>
+        <router-link to="/secret">secret</router-link>
+        <router-link to="/register">register</router-link>
+      </div>
     </div>
-    <AllWords />
+    <!-- <AllWords /> -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import json from "./assets/vocab.json";
-import AllWords from "./components/exams/AllCathegories.vue";
-import { foo } from "@/utils";
+// import AllWords from "./components/exams/AllCathegories.vue";
+// import { foo } from "@/utils";
 import { useVocabularyStore } from "@/stores/vocabulary";
-import { mapState } from "pinia";
+// import { mapState } from "pinia";
 
 enum Modality {
   All,
@@ -72,7 +77,7 @@ export default defineComponent({
     // },
   },
   components: {
-    AllWords,
+    // AllWords,
   },
 });
 </script>
