@@ -1,4 +1,5 @@
 <template>
+  <div v-if="error" class="error">{{ error }}</div>
   <form @submit.prevent="handleSignUp">
     <input type="email" v-model="email" placeholder="Email" />
     <input type="password" v-model="password" placeholder="Password" />
@@ -6,27 +7,28 @@
   </form>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-export default {
-  data() {
-    return {
-      email: "" as string,
-      password: "" as string,
-    };
-  },
-  methods: {
-    handleSignUp(): void {
-      try {
-        const email = this.email;
-        const password = this.password;
-        firebase.auth().createUserWithEmailAndPassword(email, password);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-  },
+const email = ref("");
+const password = ref("");
+const error = ref("");
+
+const router = useRouter();
+
+const handleSignUp = async () => {
+  try {
+    const user = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email.value, password.value);
+    console.log(user);
+    router.replace({ name: "secret" });
+  } catch (err) {
+    error.value = err as string;
+    alert(err);
+  }
 };
 </script>
