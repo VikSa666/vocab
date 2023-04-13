@@ -23,9 +23,15 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const pinia = createPinia();
-const app = createApp(App);
-
-app.use(pinia);
-app.use(router);
-app.config.globalProperties.$axios = axios;
-app.mount("#app");
+let app: any;
+// Load app but first get the user auth
+firebase.auth().onAuthStateChanged((user) => {
+  if (!app) {
+    console.log(user);
+    app = createApp(App);
+    app.use(router);
+    app.use(pinia);
+    app.config.globalProperties.$axios = axios;
+    app.mount("#app");
+  }
+});
