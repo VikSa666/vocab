@@ -12,6 +12,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import db from "../firebase/firebaseInit";
 
 const email = ref("");
 const password = ref("");
@@ -21,10 +22,17 @@ const router = useRouter();
 
 const handleSignUp = async () => {
   try {
-    const user = await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email.value, password.value);
+    const firebaseAuth = await firebase.auth();
+    const createUser = await firebaseAuth.createUserWithEmailAndPassword(
+      email.value,
+      password.value
+    );
+    const user = await createUser;
     console.log(user);
+    const dataBase = db.firestore().collection("users").doc(user.user?.uid);
+    await dataBase.set({
+      email: email.value,
+    });
     router.replace({ name: "secret" });
   } catch (err) {
     error.value = err as string;
