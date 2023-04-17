@@ -25,7 +25,7 @@ import { StoreState, defineStore } from "pinia";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import db from "./firebase/firebaseInit";
-import { useAuthStore } from "./stores/index";
+import { useAuthStore } from "./stores/auth";
 
 enum Modality {
   All,

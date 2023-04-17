@@ -11,7 +11,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useAuthStore } from "../stores/index";
+import { useAuthStore } from "../stores/auth";
 
 const authStore = useAuthStore();
 const isAuthenticated = authStore.isAuthenticated;

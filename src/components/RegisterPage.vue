@@ -14,7 +14,7 @@ import "firebase/compat/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import db from "../firebase/firebaseInit";
-import { useAuthStore } from "../stores";
+import { useAuthStore } from "../stores/auth";
 
 const name = ref("");
 const email = ref("");

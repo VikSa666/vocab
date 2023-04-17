@@ -21,7 +21,7 @@ import { ref } from "vue";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/index";
+import { useAuthStore } from "../stores/auth";
 
 const email = ref("");
 const password = ref("");

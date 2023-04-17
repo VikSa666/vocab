@@ -12,7 +12,7 @@ import { ref, onMounted } from "vue";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores";
+import { useAuthStore } from "../stores/auth";
 
 const loggedIn = ref(false);
 const router = useRouter();
