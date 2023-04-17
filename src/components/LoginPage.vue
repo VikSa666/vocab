@@ -21,7 +21,7 @@ import { ref } from "vue";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { useRouter } from "vue-router";
-import { async } from "@firebase/util";
+import { useAuthStore } from "../stores/index";
 
 const email = ref("");
 const password = ref("");
@@ -29,23 +29,13 @@ const error = ref("");
 const router = useRouter();
 
 const pressed = async () => {
-  const val = await firebase
-    .auth()
-    .signInWithEmailAndPassword(email.value, password.value)
-    .catch(function (error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      if (errorCode === "auth/wrong-password") {
-        alert("Wrong password.");
-      } else {
-        alert(errorMessage);
-      }
-      console.log(error);
-    });
-  if (val) {
+  try {
+    const authStore = useAuthStore();
+    const val = await authStore.signIn(email.value, password.value);
     router.replace({ name: "secret" });
     console.log(val);
+  } catch (err) {
+    alert(err);
   }
 };
 </script>

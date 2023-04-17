@@ -15,11 +15,17 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import json from "./assets/vocab.json";
-// import AllWords from "./components/exams/AllCathegories.vue";
-// import { foo } from "@/utils";
+// TODO: import AllWords from "./components/exams/AllCathegories.vue";
+// TODO: import { foo } from "@/utils";
 import { useVocabularyStore } from "@/stores/vocabulary";
 // import { mapState } from "pinia";
 import TopHeader from "./components/TopHeader.vue";
+import Vue from "vue";
+import { StoreState, defineStore } from "pinia";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import db from "./firebase/firebaseInit";
+import { useAuthStore } from "./stores/index";
 
 enum Modality {
   All,
@@ -29,8 +35,14 @@ enum Modality {
 
 export default defineComponent({
   setup() {
-    const wordList = useVocabularyStore();
-    return wordList;
+    // const wordList = useVocabularyStore();
+
+    const authStore = useAuthStore();
+
+    const isAuthenticated = authStore.isAuthenticated;
+    const signOut = authStore.signOut;
+
+    return { isAuthenticated, signOut };
   },
   data() {
     return {
@@ -40,13 +52,13 @@ export default defineComponent({
       wordsList: {} as { [key: string]: string[] },
     };
   },
-  mounted() {
-    this.json.forEach((element) => {
-      element.words.forEach(
-        (word) => (this.wordList[word.russian] = word.spanish)
-      );
-    });
-  },
+  //   mounted() {
+  //     this.json.forEach((element) => {
+  //       element.words.forEach(
+  //         (word) => (this.wordList[word.russian] = word.spanish)
+  //       );
+  //     });
+  //   },
   methods: {
     // cathegories() {
     //   this.json.forEach((element) => {
