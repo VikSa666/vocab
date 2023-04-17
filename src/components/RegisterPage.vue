@@ -26,10 +26,10 @@ const router = useRouter();
 const handleSignUp = async () => {
   try {
     const authStore = useAuthStore();
-    await authStore.signIn(email.value, name.value);
+    await authStore.signUp(name.value, email.value, password.value);
     router.replace({ name: "secret" });
   } catch (err) {
-    alert(err);
+    console.error(err);
   }
 };
 </script>

@@ -31,11 +31,10 @@ const router = useRouter();
 const pressed = async () => {
   try {
     const authStore = useAuthStore();
-    const val = await authStore.signIn(email.value, password.value);
+    await authStore.signIn(email.value, password.value);
     router.replace({ name: "secret" });
-    console.log(val);
   } catch (err) {
-    alert(err);
+    console.error(err);
   }
 };
 </script>
