@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import RegisterPage from "../components/RegisterPage.vue";
-import LoginPage from "../components/LoginPage.vue";
-import SecretPage from "../components/SecretPage.vue";
+import RegisterPage from "../views/RegisterPage.vue";
+import LoginPage from "../views/LoginPage.vue";
+import UserHomePage from "../views/UserHomePage.vue";
 import HelloWorld from "@/components/HelloWorld.vue";
 
 import firebase from "firebase/compat/app";
@@ -21,7 +21,7 @@ const routes = [
   {
     path: "/secret", // TODO: Change this
     name: "secret",
-    component: SecretPage,
+    component: UserHomePage,
     meta: { requiresAuth: true },
   },
   {

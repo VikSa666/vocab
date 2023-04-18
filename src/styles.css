@@ -1,0 +1,4 @@
+/* Remove all bullets from unordered lists */
+ul {
+  list-style-type: none;
+}

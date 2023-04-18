@@ -19,21 +19,12 @@
 <script lang="ts" setup>
 import { defineProps, ref } from "vue";
 import { useAuthStore } from "../stores/auth";
+import { VocabularyList } from "../types";
 
 const authStore = useAuthStore();
 
-// TODO: Make common
-interface FakeVocabularyList {
-  name: string;
-  items: Array<FakeVocabularyItem>;
-}
-interface FakeVocabularyItem {
-  word: string;
-  translation: string;
-}
-
 interface Props {
-  list: FakeVocabularyList;
+  list: VocabularyList;
 }
 
 const props = defineProps<Props>();

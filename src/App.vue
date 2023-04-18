@@ -1,12 +1,7 @@
 <template>
   <div id="app">
-    <top-header></top-header>
-    <h1>Hello World</h1>
     <div id="nav">
-      <router-link to="/">home</router-link> |
-      <router-link to="/login">login</router-link>|
-      <router-link to="/secret">secret</router-link>|
-      <router-link to="/register">register</router-link>
+      <top-header></top-header>
     </div>
     <router-view />
   </div>
@@ -17,14 +12,9 @@ import { defineComponent } from "vue";
 import json from "./assets/vocab.json";
 // TODO: import AllWords from "./components/exams/AllCathegories.vue";
 // TODO: import { foo } from "@/utils";
-import { useVocabularyStore } from "@/stores/vocabulary";
 // import { mapState } from "pinia";
 import TopHeader from "./components/TopHeader.vue";
-import Vue from "vue";
-import { StoreState, defineStore } from "pinia";
-import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
-import db from "./firebase/firebaseInit";
 import { useAuthStore } from "./stores/auth";
 
 enum Modality {
@@ -94,6 +84,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import "./styles.css";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

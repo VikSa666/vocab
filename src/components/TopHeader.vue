@@ -1,9 +1,10 @@
 <template>
-  <div>
-    Logged in
-    <span v-if="loggedIn">Yes</span>
-    <span v-else>No</span>
-    <div><button @click="signOut">Sign out</button></div>
+  <div id="nav">
+    <div>
+      <router-link to="login" v-if="loggedIn">Sign out</router-link>
+      <router-link to="login" v-if="!loggedIn">Log in</router-link>
+      <router-link to="register" v-if="!loggedIn">Register</router-link>
+    </div>
   </div>
 </template>
 
@@ -23,6 +24,14 @@ const signOut = async () => {
   router.replace({ name: "login" });
 };
 
+const login = () => {
+  router.replace({ name: "login" });
+};
+
+const register = () => {
+  router.replace({ name: "register" });
+};
+
 onMounted(() => {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
@@ -33,3 +42,10 @@ onMounted(() => {
   });
 });
 </script>
+
+<style lang="scss">
+#nav {
+  display: flex;
+  flex-direction: row;
+}
+</style>

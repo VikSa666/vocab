@@ -2,21 +2,12 @@ import { defineStore } from "pinia";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import db from "../firebase/firebaseInit";
+import { VocabularyList } from "../types";
 
 interface UserData {
   email: string;
   userName: string;
   vocabularyLists: Array<VocabularyList>;
-}
-
-interface VocabularyList {
-  name: string;
-  items: Array<VocabularyItem>;
-}
-
-interface VocabularyItem {
-  word: string;
-  translation: string;
 }
 
 export const useAuthStore = defineStore("auth", {
@@ -135,6 +126,17 @@ export const useAuthStore = defineStore("auth", {
         items: [],
       };
       this.userData?.vocabularyLists?.push(vocabularyList);
+      await this.updateUserData();
+    },
+
+    async removeList(list: VocabularyList) {
+      let index = -1;
+      if (list) {
+        index = this.userData?.vocabularyLists.indexOf(list) ?? -1;
+      }
+      if (index !== -1) {
+        this.userData?.vocabularyLists.splice(index, 1);
+      }
       await this.updateUserData();
     },
 
