@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import RegisterPage from "../views/RegisterPage.vue";
 import LoginPage from "../views/LoginPage.vue";
 import UserHomePage from "../views/UserHomePage.vue";
-import HelloWorld from "@/components/HelloWorld.vue";
+import HomePage from "../views/HomePage.vue";
 
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
@@ -11,7 +11,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: HelloWorld,
+    component: HomePage,
   },
   {
     path: "/register",
