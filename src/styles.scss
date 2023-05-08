@@ -1,0 +1,82 @@
+/* Remove all bullets from unordered lists */
+ul {
+  list-style: none;
+  list-style-type: none;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+button {
+  transition: all 0.5s ease;
+  cursor: pointer;
+  margin-top: 24px;
+  padding: 12px 24px;
+  background-color: #303030;
+  color: #fff;
+  border-radius: 1px;
+  border: none;
+  text-transform: uppercase;
+
+  &:hover {
+    background-color: rgba(48, 48, 48, 0.7);
+  }
+}
+
+/* .link {
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: black;
+}
+
+.link-light {
+  color: #fff;
+} */
+
+p {
+  font-size: 14px;
+  color: black;
+  text-decoration: none;
+  .link {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 16px 0 32px;
+    border-bottom: 1px solid transparent;
+    transition: 0.5s ease all;
+
+    &:hover {
+      border-color: #303030;
+    }
+  }
+}
+
+.lang-card-wrap {
+  position: relative;
+  padding: 80px 16px;
+  background-color: #f1f1f1;
+  @media (min-width: 500px) {
+    padding: 100px 16px;
+  }
+
+  .lang-cards {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: 1fr;
+    @media (min-width: 500px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 900px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (min-width: 1200px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}

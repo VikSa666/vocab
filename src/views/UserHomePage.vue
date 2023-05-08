@@ -1,14 +1,10 @@
 <template>
   <div>
-    <h1>Welcome to secret page</h1>
-    <p>Logged in {{ isAuthenticated }}</p>
+    <h1>Welcome to your LearnVocab User Home Page</h1>
   </div>
   <div v-if="isAuthenticated && userData !== null">
-    <h2>Welcome, {{ userData?.userName }}</h2>
-    <p>Email: {{ userData?.email }}</p>
-
     <div class="lists-top-header">
-      <h2>Your lists</h2>
+      <h2>Your languages</h2>
       <div class="create-list-option">
         <button @click="createListDropdownActive = !createListDropdownActive">
           Create
@@ -46,6 +42,19 @@
         />
       </li>
     </ul>
+    <div class="lang-card-wrap">
+      <div class="container">
+        <h3>View your language lists here</h3>
+        <div class="lang-cards">
+          <lang-card
+            v-for="(card, index) in sampleLangCards"
+            :key="index"
+            :lang="card.lang"
+            :listNumber="card.lists"
+          />
+        </div>
+      </div>
+    </div>
   </div>
   <div v-else>Loading...</div>
 </template>
@@ -53,7 +62,8 @@
 import { ref } from "vue";
 import { useAuthStore } from "../stores/auth";
 import VocabularyListItem from "../components/VocabularyListItem.vue";
-import { VocabularyList } from "../types";
+import { VocabularyList, Language } from "../types";
+import LangCard from "../components/LangCard.vue";
 
 const authStore = useAuthStore();
 const isAuthenticated = authStore.isAuthenticated;
@@ -63,6 +73,38 @@ const selected = ref<Array<VocabularyList>>([]);
 const lists = authStore.getAllVocabularyLists;
 
 const name = ref("");
+
+// DELETEEEEE
+const sampleLangCards = [
+  {
+    lang: Language.Russian,
+    lists: 18,
+  },
+  {
+    lang: Language.Russian,
+    lists: 18,
+  },
+  {
+    lang: Language.Russian,
+    lists: 18,
+  },
+  {
+    lang: Language.Russian,
+    lists: 18,
+  },
+  {
+    lang: Language.Russian,
+    lists: 18,
+  },
+  {
+    lang: Language.Russian,
+    lists: 18,
+  },
+  {
+    lang: Language.Russian,
+    lists: 18,
+  },
+];
 
 const createListDropdownActive = ref(false);
 
@@ -105,6 +147,7 @@ const inactiveDropdown = () => {
 };
 </script>
 <style lang="scss" scoped>
+@import "../styles.scss";
 .vocabulary-list-item {
   display: flex;
   flex-direction: row;
@@ -141,5 +184,13 @@ const inactiveDropdown = () => {
 .create-list-dropdown-active {
   display: flex;
   flex-direction: column;
+}
+
+.lang-card-wrap {
+  h3 {
+    font-weight: 300;
+    font-size: 28px;
+    margin-bottom: 32px;
+  }
 }
 </style>

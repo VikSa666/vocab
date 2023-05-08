@@ -8,11 +8,17 @@
       </div>
       <div class="nav-links">
         <ul v-show="!mobile">
-          <router-link class="link" :to="{ name: 'login' }" v-if="loggedIn"
+          <router-link
+            class="link"
+            :to="{ name: 'login' }"
+            v-if="loggedIn"
+            @click="logout"
             >Sign out</router-link
           >
-          <router-link class="link" :to="{ name: 'login' }">Log in</router-link>
-          <router-link class="link" :to="{ name: 'register' }"
+          <router-link class="link" :to="{ name: 'login' }" v-if="!loggedIn"
+            >Log in</router-link
+          >
+          <router-link class="link" :to="{ name: 'register' }" v-if="!loggedIn"
             >Register</router-link
           >
         </ul>
@@ -42,15 +48,20 @@
 import { ref, onMounted } from "vue";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/auth";
 
 const loggedIn = ref(false);
+
+const router = useRouter();
 
 onMounted(() => {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-      console.log(user);
+      console.log("Logged in");
       loggedIn.value = true;
     } else {
+      console.log("Logged out");
       loggedIn.value = false;
     }
   });
@@ -71,6 +82,16 @@ const checkScreen = () => {
     mobileNav.value = false;
   }
 };
+
+const logout = async () => {
+  try {
+    const authStore = useAuthStore();
+    await authStore.signOut();
+    router.replace({ name: "secret" });
+  } catch (err) {
+    console.error(err);
+  }
+};
 window.addEventListener("resize", () => checkScreen());
 
 const toggleMobileNav = () => {
@@ -79,7 +100,19 @@ const toggleMobileNav = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "../styles.css";
+@import "../styles.scss";
+
+.link {
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: black;
+}
+
+.link-light {
+  color: #fff;
+}
+
 header {
   background-color: #fff;
   padding: 0 25px;
@@ -90,16 +123,16 @@ header {
   .link {
     font-weight: 500;
     padding: 0 8px;
-    transition: 0.3s color ease;
+    transition: 0.5s background-color ease;
 
     &:hover {
-      color: #1eb8b8;
+      background-color: #eee;
     }
   }
 
   nav {
+    min-height: 50px;
     display: flex;
-    padding: 25px 0;
 
     .branding {
       display: flex;
@@ -122,13 +155,26 @@ header {
 
     ul {
       margin-right: 32px;
+      margin-top: 0;
+      margin-bottom: 0;
+      height: 100%;
+      margin-block-start: 0;
+      margin-block-end: 0;
 
-      .link {
-        margin-right: 32px;
+      a {
+        display: inline-block;
+        height: 100%;
+        align-content: center;
+        text-align: center;
       }
 
-      .link:last-child {
-        margin-right: 0;
+      .link {
+        text-align: center;
+        align-content: center;
+        align-items: center;
+        padding-left: 32px;
+        padding-right: 32px;
+        height: 100%;
       }
     }
   }
