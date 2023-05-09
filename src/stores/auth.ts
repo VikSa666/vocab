@@ -2,12 +2,12 @@ import { defineStore } from "pinia";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import db from "../firebase/firebaseInit";
-import { VocabularyList } from "../types";
+import { VocabularyList, LanguageList, Language } from "../types";
 
 interface UserData {
   email: string;
   userName: string;
-  vocabularyLists: Array<VocabularyList>;
+  languages: Array<LanguageList>;
 }
 
 export const useAuthStore = defineStore("auth", {
@@ -19,15 +19,27 @@ export const useAuthStore = defineStore("auth", {
   getters: {
     isAuthenticated: (state) => !!state.user, // Returns true if user is authenticated, otherwise false
     getUserData: (state) => state.userData,
-    getVocabularyList: (state) => {
-      return (listName: string) => {
-        state.userData?.vocabularyLists?.find((list) => list.name == listName);
+    getLanguageList: (state) => {
+      return (langName: Language) => {
+        state.userData?.languages?.find((lang) => lang.language == langName);
       };
     },
-    getAllVocabularyLists: (state) => state.userData?.vocabularyLists,
+    getAllLanguageLists: (state) => state.userData?.languages,
+    countListsOfLanguage: (state) => {
+      return (langName: Language) => {
+        state.userData?.languages?.find((lang) => lang.language == langName)
+          ?.vocabularyLists.length;
+      };
+    },
   },
   actions: {
-    async signUp(name: string, email: string, password: string) {
+    async signUp(
+      firstName: string,
+      lastName: string,
+      username: string,
+      email: string,
+      password: string
+    ) {
       try {
         const userCredential = await firebase
           .auth()
@@ -41,7 +53,9 @@ export const useAuthStore = defineStore("auth", {
         await dataBase;
 
         await dataBase.set({
-          userName: name,
+          firstName,
+          lastName,
+          username,
           email,
           vocabularyLists: [] as Array<VocabularyList>,
         });
@@ -109,10 +123,10 @@ export const useAuthStore = defineStore("auth", {
 
         await userDataBase;
         if (!userDataBase) console.error("asdfasdfasdf");
-        console.log(this.userData?.vocabularyLists);
+        console.log(this.userData?.languages);
 
         await userDataBase.set({
-          vocabularyLists: this.userData?.vocabularyLists,
+          vocabularyLists: this.userData?.languages,
         });
       } catch (error) {
         this.error = error as firebase.auth.Error;
@@ -120,30 +134,51 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async createList(name: string) {
-      const vocabularyList = {
-        name,
-        items: [],
+    async createLang(language: Language) {
+      const lang = {
+        language,
+        vocabularyLists: [],
       };
-      this.userData?.vocabularyLists?.push(vocabularyList);
+      this.userData?.languages?.push(lang);
       await this.updateUserData();
     },
 
-    async removeList(list: VocabularyList) {
+    async removeLang(lang: LanguageList) {
       let index = -1;
-      if (list) {
-        index = this.userData?.vocabularyLists.indexOf(list) ?? -1;
+      if (lang) {
+        index = this.userData?.languages.indexOf(lang) ?? -1;
       }
       if (index !== -1) {
-        this.userData?.vocabularyLists.splice(index, 1);
+        this.userData?.languages.splice(index, 1);
       }
       await this.updateUserData();
     },
 
-    async createWord(listName: string, word: string, translation: string) {
-      this.userData?.vocabularyLists
-        ?.find((vlist) => vlist.name == listName)
-        ?.items.push({ word, translation });
+    async createList(lang: Language, listName: string) {
+      const list = {
+        name: listName,
+        items: [],
+      };
+      this.userData?.languages
+        ?.find((language) => language.language == lang)
+        ?.vocabularyLists.push(list);
+      await this.updateUserData();
+    },
+
+    async createWord(
+      lang: Language,
+      listName: string,
+      word: string,
+      translation: string
+    ) {
+      const item = {
+        word,
+        translation,
+      };
+      this.userData?.languages
+        ?.find((language) => language.language == lang)
+        ?.vocabularyLists.find((list) => list.name == listName)
+        ?.items.push(item);
       await this.updateUserData();
     },
   },
