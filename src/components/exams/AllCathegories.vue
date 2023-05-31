@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="all-words">
     <p>{{ russianWord }}:{{ wordTranslation }}</p>
     <input type="text" v-model="answer" />

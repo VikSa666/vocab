@@ -32,7 +32,6 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth";

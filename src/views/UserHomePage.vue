@@ -30,7 +30,7 @@
       <button @click="deleteSelection">Delete Selection</button>
     </div>
     <ul>
-      <li v-for="list in lists" :key="list.name">
+      <li v-for="list in lists?.vocabularyLists" :key="list.name">
         <vocabulary-list-item
           :list="list"
           @click="modifySelectedList(list)"
@@ -61,6 +61,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useAuthStore } from "../stores/auth";
+import { useVocabularyStore } from "../stores/vocabulary";
 import VocabularyListItem from "../components/VocabularyListItem.vue";
 import { VocabularyList, Language } from "../types";
 import LangCard from "../components/LangCard.vue";
@@ -70,7 +71,8 @@ const isAuthenticated = authStore.isAuthenticated;
 const userData = authStore.getUserData;
 const selected = ref<Array<VocabularyList>>([]);
 
-const lists = authStore.getAllVocabularyLists;
+const vocabularyStore = useVocabularyStore();
+const lists = vocabularyStore.getLists;
 
 const name = ref("");
 
@@ -109,7 +111,7 @@ const sampleLangCards = [
 const createListDropdownActive = ref(false);
 
 const addList = () => {
-  authStore.createList(name.value);
+  vocabularyStore.createLanguageList(userData, name.value);
 
   // Hide the dropdown when the "create" button is pressed
   createListDropdownActive.value = false;
@@ -138,7 +140,8 @@ const editSelected = () => {
 
 const deleteSelection = () => {
   selected.value.forEach((list) => {
-    authStore.removeList(list);
+    // authStore.removeList(list);
+    console.log("todo");
   });
 };
 

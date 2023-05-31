@@ -7,8 +7,11 @@ import { VocabularyList, LanguageList, Language } from "../types";
 interface UserData {
   email: string;
   userName: string;
-  languages: Array<LanguageList>;
+  uid: string;
+  isAuthenticated: boolean;
 }
+
+export { UserData };
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -19,18 +22,18 @@ export const useAuthStore = defineStore("auth", {
   getters: {
     isAuthenticated: (state) => !!state.user, // Returns true if user is authenticated, otherwise false
     getUserData: (state) => state.userData,
-    getLanguageList: (state) => {
-      return (langName: Language) => {
-        state.userData?.languages?.find((lang) => lang.language == langName);
-      };
-    },
-    getAllLanguageLists: (state) => state.userData?.languages,
-    countListsOfLanguage: (state) => {
-      return (langName: Language) => {
-        state.userData?.languages?.find((lang) => lang.language == langName)
-          ?.vocabularyLists.length;
-      };
-    },
+    // getLanguageList: (state) => {
+    //   return (langName: Language) => {
+    //     state.userData?.languages?.find((lang) => lang.language == langName);
+    //   };
+    // },
+    // getAllLanguageLists: (state) => state.userData?.languages,
+    // countListsOfLanguage: (state) => {
+    //   return (langName: Language) => {
+    //     state.userData?.languages?.find((lang) => lang.language == langName)
+    //       ?.vocabularyLists.length;
+    //   };
+    // },
   },
   actions: {
     async signUp(
@@ -48,9 +51,7 @@ export const useAuthStore = defineStore("auth", {
         this.user = createdUser.user; // Set user object to the state
         this.error = null; // Reset error object
 
-        console.log(this.user?.uid);
         const dataBase = db.firestore().collection("users").doc(this.user?.uid);
-        await dataBase;
 
         await dataBase.set({
           firstName,
@@ -72,7 +73,6 @@ export const useAuthStore = defineStore("auth", {
           .signInWithEmailAndPassword(email, password);
         this.user = userCredential.user; // Set user object to the state
         await this.fetchUserData();
-        console.log(this.userData);
         this.error = null; // Reset error object
       } catch (error) {
         this.error = error as firebase.auth.Error; // Set error object to the state
@@ -101,7 +101,6 @@ export const useAuthStore = defineStore("auth", {
         const db = firebase.firestore();
         const userDataRef = db.collection("users").doc(userId);
         const userDataSnapshot = await userDataRef.get();
-        console.log(userId);
         this.userData = userDataSnapshot.data() as UserData; // Set user data to the state
       } catch (error) {
         this.error = error as firebase.auth.Error;
@@ -123,10 +122,9 @@ export const useAuthStore = defineStore("auth", {
 
         await userDataBase;
         if (!userDataBase) console.error("asdfasdfasdf");
-        console.log(this.userData?.languages);
 
         await userDataBase.set({
-          vocabularyLists: this.userData?.languages,
+          ...this.userData,
         });
       } catch (error) {
         this.error = error as firebase.auth.Error;
@@ -134,52 +132,52 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async createLang(language: Language) {
-      const lang = {
-        language,
-        vocabularyLists: [],
-      };
-      this.userData?.languages?.push(lang);
-      await this.updateUserData();
-    },
+    // async createLang(language: Language) {
+    //   const lang = {
+    //     language,
+    //     vocabularyLists: [],
+    //   };
+    //   this.userData?.languages?.push(lang);
+    //   await this.updateUserData();
+    // },
 
-    async removeLang(lang: LanguageList) {
-      let index = -1;
-      if (lang) {
-        index = this.userData?.languages.indexOf(lang) ?? -1;
-      }
-      if (index !== -1) {
-        this.userData?.languages.splice(index, 1);
-      }
-      await this.updateUserData();
-    },
+    // async removeLang(lang: LanguageList) {
+    //   let index = -1;
+    //   if (lang) {
+    //     index = this.userData?.languages.indexOf(lang) ?? -1;
+    //   }
+    //   if (index !== -1) {
+    //     this.userData?.languages.splice(index, 1);
+    //   }
+    //   await this.updateUserData();
+    // },
 
-    async createList(lang: Language, listName: string) {
-      const list = {
-        name: listName,
-        items: [],
-      };
-      this.userData?.languages
-        ?.find((language) => language.language == lang)
-        ?.vocabularyLists.push(list);
-      await this.updateUserData();
-    },
+    // async createList(lang: Language, listName: string) {
+    //   const list = {
+    //     name: listName,
+    //     items: [],
+    //   };
+    //   this.userData?.languages
+    //     ?.find((language) => language.language == lang)
+    //     ?.vocabularyLists.push(list);
+    //   await this.updateUserData();
+    // },
 
-    async createWord(
-      lang: Language,
-      listName: string,
-      word: string,
-      translation: string
-    ) {
-      const item = {
-        word,
-        translation,
-      };
-      this.userData?.languages
-        ?.find((language) => language.language == lang)
-        ?.vocabularyLists.find((list) => list.name == listName)
-        ?.items.push(item);
-      await this.updateUserData();
-    },
+    // async createWord(
+    //   lang: Language,
+    //   listName: string,
+    //   word: string,
+    //   translation: string
+    // ) {
+    //   const item = {
+    //     word,
+    //     translation,
+    //   };
+    //   this.userData?.languages
+    //     ?.find((language) => language.language == lang)
+    //     ?.vocabularyLists.find((list) => list.name == listName)
+    //     ?.items.push(item);
+    //   await this.updateUserData();
+    // },
   },
 });
