@@ -9,12 +9,9 @@
 </template>
 
 <script lang="ts" setup>
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import db from "../firebase/firebaseInit";
-import { useAuthStore } from "../stores/auth";
+// import { useAuthStore } from "../stores/auth";
 
 const name = ref("");
 const email = ref("");
@@ -23,13 +20,18 @@ const error = ref("");
 
 const router = useRouter();
 
-const handleSignUp = async () => {
-  try {
-    const authStore = useAuthStore();
-    await authStore.signUp(name.value, email.value, password.value);
-    router.replace({ name: "secret" });
-  } catch (err) {
-    console.error(err);
-  }
+const handleSignUp = () => {
+  router.replace({ name: "secret" });
+  alert("ok bro");
 };
+
+// const handleSignUp = async () => {
+//   try {
+//     const authStore = useAuthStore();
+//     await authStore.signUp(name.value, email.value, password.value);
+//     router.replace({ name: "secret" });
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
 </script>

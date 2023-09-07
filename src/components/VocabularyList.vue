@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <h3>{{ list.name }}</h3>
     <form @submit.prevent="addWord">
@@ -43,4 +43,4 @@ const translation = ref("");
 const addWord = () => {
   authStore.createWord(props.list.name, word.value, translation.value);
 };
-</script>
+</script> -->

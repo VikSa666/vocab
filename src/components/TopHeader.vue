@@ -12,15 +12,20 @@ import { ref, onMounted } from "vue";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth";
+// import { useAuthStore } from "../stores/auth";
 
 const loggedIn = ref(false);
 const router = useRouter();
 
-const signOut = async () => {
-  const authStore = useAuthStore();
-  authStore.signOut();
+// const signOut = async () => {
+//   const authStore = useAuthStore();
+//   authStore.signOut();
+//   router.replace({ name: "login" });
+// };
+
+const signOut = () => {
   router.replace({ name: "login" });
+  alert("ok bro");
 };
 
 onMounted(() => {

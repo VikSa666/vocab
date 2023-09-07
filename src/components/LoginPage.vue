@@ -18,24 +18,26 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth";
 
 const email = ref("");
 const password = ref("");
 const error = ref("");
 const router = useRouter();
 
-const pressed = async () => {
-  try {
-    const authStore = useAuthStore();
-    await authStore.signIn(email.value, password.value);
-    router.replace({ name: "secret" });
-  } catch (err) {
-    console.error(err);
-  }
+const pressed = () => {
+  router.replace({ name: "secret" });
+  alert("ok bro");
 };
+
+// const pressed = async () => {
+//   try {
+//     const authStore = useAuthStore();
+//     await authStore.signIn(email.value, password.value);
+//     router.replace({ name: "secret" });
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
 </script>
 <style lang="scss"></style>
