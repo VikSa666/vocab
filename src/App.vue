@@ -1,31 +1,25 @@
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
+import LoginPage from "./components/LoginPage.vue";
+import SecretsPage from "./components/SecretPage.vue";
 import { supabase } from "./supabase/supabaseClient";
-import { RouterLink, RouterView } from "vue-router";
 
-const countries = ref([] as any[] | null);
-
-async function getCountries() {
-  const { data } = await supabase.from("countries").select();
-  countries.value = data;
-}
+const session = ref();
 
 onMounted(() => {
-  getCountries();
+  supabase.auth.getSession().then(({ data }) => {
+    session.value = data.session;
+  });
+
+  supabase.auth.onAuthStateChange((_, _session) => {
+    session.value = _session;
+  });
 });
 </script>
 
 <template>
-  <div>
-    <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/secret">Secret</router-link>
-      <router-link to="/login">Login</router-link>
-    </nav>
+  <div class="container" style="padding: 50px 0 100px 0">
+    <secrets-page v-if="session" :session="session" />
+    <login-page v-else />
   </div>
-  <h1>Countries</h1>
-  <ul>
-    <li v-for="country in countries" :key="country.id">{{ country.name }}</li>
-  </ul>
-  <router-view />
 </template>

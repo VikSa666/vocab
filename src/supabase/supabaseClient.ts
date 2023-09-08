@@ -1,18 +1,15 @@
-import { createClient } from "@supabase/supabase-js";
+import { SupabaseClient, createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = async () => {
-  const url = await import.meta.env.VUE_SUPABASE_URL;
-  if (!url) {
-    throw new Error("VUE_SUPABASE_URL not set");
-  }
-  return url;
-};
-const supabaseKey = async () => {
-  const key = await process.env.VUE_SUPAKEY;
-  if (!key) {
-    throw new Error("VUE_SUPAKEY not set");
-  }
-  return key;
-};
+const supabaseUrl = process.env.VUE_APP_SUPABASE_URL;
+const supabaseKey = process.env.VUE_APP_SUPABASE_KEY;
 
-export const supabase = createClient(await supabaseUrl(), await supabaseKey());
+let supabase: SupabaseClient;
+
+// Check if both environment variables are defined before creating the Supabase client
+if (supabaseUrl && supabaseKey) {
+  supabase = createClient(supabaseUrl, supabaseKey);
+} else {
+  console.error("Supabase URL or key is undefined.");
+}
+
+export { supabase };
