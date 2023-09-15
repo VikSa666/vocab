@@ -3,9 +3,7 @@ import RegisterPage from "../components/RegisterPage.vue";
 import LoginPage from "../components/LoginPage.vue";
 import SecretPage from "../components/SecretPage.vue";
 import HelloWorld from "@/components/HelloWorld.vue";
-
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
+import { supabase } from "@/supabase/supabaseClient";
 
 const routes = [
   {
@@ -38,7 +36,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-  const isAuthenticated = firebase.auth().currentUser;
+  const isAuthenticated = supabase.auth.getUser().then((user) => {
+    user.error === null;
+  });
   if (requiresAuth && !isAuthenticated) {
     next("/login");
   } else {

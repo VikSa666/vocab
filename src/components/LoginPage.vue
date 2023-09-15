@@ -18,10 +18,8 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth";
+import { supabase } from "../supabase/supabaseClient";
 
 const email = ref("");
 const password = ref("");
@@ -30,12 +28,19 @@ const router = useRouter();
 
 const pressed = async () => {
   try {
-    const authStore = useAuthStore();
-    await authStore.signIn(email.value, password.value);
+    await signIn(email.value, password.value);
     router.replace({ name: "secret" });
   } catch (err) {
     console.error(err);
   }
+};
+
+const signIn = async (email: string, password: string) => {
+  const userCredential = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  });
+  console.log(userCredential.data.user?.email);
 };
 </script>
 <style lang="scss"></style>

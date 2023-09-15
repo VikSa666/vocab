@@ -3,10 +3,7 @@ import App from "./App.vue";
 import { createPinia } from "pinia";
 import router from "./router";
 import axios from "axios";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-// Import the functions you need from the SDKs you need
-import { getAnalytics } from "firebase/analytics";
+import { supabase } from "./supabase/supabaseClient";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,7 +13,7 @@ import { getAnalytics } from "firebase/analytics";
 const pinia = createPinia();
 let app: any;
 // Load app but first get the user auth
-firebase.auth().onAuthStateChanged((user) => {
+supabase.auth.onAuthStateChange((user) => {
   if (!app) {
     console.log(user);
     app = createApp(App);

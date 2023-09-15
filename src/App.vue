@@ -22,10 +22,7 @@ import { useVocabularyStore } from "@/stores/vocabulary";
 import TopHeader from "./components/TopHeader.vue";
 import Vue from "vue";
 import { StoreState, defineStore } from "pinia";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
-import db from "./firebase/firebaseInit";
-import { useAuthStore } from "./stores/auth";
+import { supabase } from "./supabase/supabaseClient";
 
 enum Modality {
   All,
@@ -37,10 +34,10 @@ export default defineComponent({
   setup() {
     // const wordList = useVocabularyStore();
 
-    const authStore = useAuthStore();
-
-    const isAuthenticated = authStore.isAuthenticated;
-    const signOut = authStore.signOut;
+    const isAuthenticated = supabase.auth
+      .getSession()
+      .then((session) => session.data.session);
+    const signOut = supabase.auth.signOut();
 
     return { isAuthenticated, signOut };
   },
@@ -103,3 +100,4 @@ export default defineComponent({
   margin-top: 60px;
 }
 </style>
+./supabase/firebaseInit

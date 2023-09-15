@@ -9,22 +9,19 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth";
+import { supabase } from "../supabase/supabaseClient";
 
 const loggedIn = ref(false);
 const router = useRouter();
 
 const signOut = async () => {
-  const authStore = useAuthStore();
-  authStore.signOut();
+  supabase.auth.signOut();
   router.replace({ name: "login" });
 };
 
 onMounted(() => {
-  firebase.auth().onAuthStateChanged((user) => {
+  supabase.auth.onAuthStateChange((user) => {
     if (user) {
       loggedIn.value = true;
     } else {
